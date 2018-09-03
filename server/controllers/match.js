@@ -14,9 +14,7 @@ class MatchController {
         try{
             match_id = JSON.parse(match_id)
         }catch (e){}
-        let matchs = await ctx_service.match.get({
-            where: {match_id}
-        });
+        let matchs = await ctx_service.match.getAll('match_id', match_id);
         if(!matchs || !matchs.length){
             throw new Error('没有比赛信息');
             return;
@@ -31,11 +29,7 @@ class MatchController {
             }
             return sum;
         }, []);
-        let membersInfo = await ctx_service.user.get({
-            where: {
-                open_id: members_openIds
-            }
-        });
+        let membersInfo = await ctx_service.user.getAll('open_id', members_openIds);
         matchs.forEach(item => {
             item.leader = Object.assign({}, membersInfo.find(i => i.open_id == item.leader));
             if(item.members){

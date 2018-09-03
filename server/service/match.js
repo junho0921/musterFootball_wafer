@@ -21,6 +21,20 @@ class MatchService {
     }
 
     /**
+     * 查询一系列的
+     * @param {Object} options 查询条件
+     * @return {Object} result
+     */
+    async getAll(key, value) {
+        return mysql(TABLE_NAME)
+            .select('*')
+            .whereIn(key, value)
+            .catch(e => {
+                throw new Error(`get ${TABLE_NAME} fail\n${e}`)
+            });
+    }
+
+    /**
      * 增加
      * @param {Object} item
      * @return {Boolean} result 是否增加成功

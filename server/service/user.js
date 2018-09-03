@@ -17,6 +17,17 @@ class UserService {
             });
     }
     /**
+     * 获取一系列
+     */
+    async getAll(key, value) {
+        return mysql(TABLE_NAME)
+            .select('*')
+            .whereIn(key, value)
+            .catch(e => {
+                throw new Error(`get ${TABLE_NAME} fail\n${e}`)
+            });
+    }
+    /**
      * 增加
      * @param {Object} item
      */
