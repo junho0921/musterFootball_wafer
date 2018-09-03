@@ -37,8 +37,8 @@ router.post('/message', controllers.message.post)
 // router.get('/user/login', authorizationMiddleware, controllers.user.login);
 // router.post('/user/update', validationMiddleware, controllers.user.update);
 // 比赛
-router.post('/match/muster', validationMiddleware, controllers.match.muster);
-router.post('/match/edit', validationMiddleware, controllers.match.edit);
+router.get('/match/muster', validationMiddleware, controllers.match.muster);
+router.get('/match/edit', validationMiddleware, controllers.match.edit);
 router.get('/match/cancel', validationMiddleware, controllers.match.cancel);
 router.get('/match/join', validationMiddleware, controllers.match.join);
 router.get('/match/regret', validationMiddleware, controllers.match.regret);
