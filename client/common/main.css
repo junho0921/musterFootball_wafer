@@ -1,0 +1,56 @@
+#joinMatchPanel{
+    display: none;
+    background: #eee;
+    padding: 10px
+}
+
+.userSpan{
+    display: inline-block;
+    border: 2px solid lightgrey;
+    text-align: center;
+    margin-right: 10px;
+}
+.userSpan img{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+.memberControl{
+    display:none;
+}
+#popWin{
+    /*display: flex;*/
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    botttom: 0;
+    right: 0;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+}
+#popWin .mask{
+    content: '';
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 0;
+    top: 0;
+    botttom: 0;
+    right: 0;
+    z-index: -1;
+}
+#popWin .content{
+    padding:10px;
+    width: 80vw;
+    height: 80vh;
+    background: #fff;
+}
+
+.canceled{
+    opacity: 0.6;
+}

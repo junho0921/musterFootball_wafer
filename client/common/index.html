@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>组队踢球吧</title>
+    <link rel="stylesheet" href="/public/css/main.css" />
+</head>
+<body>
+    <div>
+        {% for item in members %}
+        <button class="login" data-skey="{{item.skey}}">{{ item.name }} 登陆</button>
+        {% endfor %}
+        <div class="name"></div>
+    </div>
+    <!--比赛信息-->
+    <div class="table" id="joinMatchPanel">
+        <div id="matchDetail"></div>
+    </div>
+    <div class="table">
+        <h2 id="editUserInfo">更新信息</h2>
+    </div>
+    <div class="table">
+        <h2 id="musterMatch">发起比赛</h2>
+    </div>
+    <!--我组织的比赛-->
+    <div class="table">
+        <div id="musterMatchDetailList"></div>
+    </div>
+    <!--我参加的比赛-->
+    <div class="table">
+        <div id="joinMatchDetailList"></div>
+    </div>
+    <!--弹窗-->
+    <div id="popWin">
+        <div class="mask"></div>
+        <div class="content"></div>
+    </div>
+</body>
+<script src="/public/js/jquery/dist/jquery.js"></script>
+<script src="/public/js/template.js"></script>
+<script src="/public/js/request.js"></script>
+<script src="/public/js/main.js"></script>
+</html>
