@@ -3,6 +3,36 @@
 const {splitWord} = require('../tools/CONST');
 const ctx_service = require('../service');
 
+const getMatchUser  = async (ctx) => {
+    const query = ctx.query;
+    let match_id = query.id;
+    if (!match_id){
+        throw new Error('参数错误');
+        return
+    }
+    if (ctx.state.$wxInfo.loginState !== 1) {
+        throw new Error('登陆状态失败');
+        return;
+    }
+    let data = ctx.state.$wxInfo.userinfo;
+    let open_id = data.userinfo.openId;
+    // 查询当前登录用户信息
+    let userInfo = await ctx_service.user.get({where: {open_id}});
+    userInfo = userInfo && userInfo[0];
+    if (!userInfo) {
+        throw new Error('请先登陆');
+        return;
+    }
+    // 查询比赛信息
+    let matchInfo = await ctx_service.match.get({where: {match_id}});
+    matchInfo = matchInfo && matchInfo[0];
+    if (!matchInfo) {
+        throw new Error('无此比赛信息');
+        return
+    }
+    return {match_id, open_id, userInfo, matchInfo}
+};
+
 class MatchController {
     async get(ctx) {
         const query = ctx.query;
@@ -43,7 +73,7 @@ class MatchController {
     }
 
     async cancel(ctx){
-        const res = await this.getMatchUser();
+        const res = await getMatchUser(ctx);
         if(!res){
             return
         }
@@ -73,36 +103,8 @@ class MatchController {
         ctx.state.data = 1
     }
 
-    async getMatchUser (ctx) {
-        const query = ctx.query;
-        let match_id = query.id;
-        if (!match_id){
-            throw new Error('参数错误');
-            return
-        }
-        if (ctx.state.$wxInfo.loginState !== 1) {
-            throw new Error('登陆状态失败');
-            return;
-        }
-        let data = ctx.state.$wxInfo.userinfo;
-        let open_id = data.open_id;
-        // 查询当前登录用户信息
-        const userInfo = await ctx_service.user.get({where: {open_id}});
-        if (!userInfo) {
-            throw new Error('请先登陆');
-            return;
-        }
-        // 查询比赛信息
-        const matchInfo = await ctx_service.match.get({where: {match_id}});
-        if (!matchInfo) {
-            throw new Error('无此比赛信息');
-            return
-        }
-        return {match_id, open_id, userInfo, matchInfo}
-    }
-
     async join(ctx) {
-        const res = await this.getMatchUser();
+        const res = await getMatchUser(ctx);
         if(!res){
             return
         }
@@ -146,7 +148,7 @@ class MatchController {
     }
 
     async regret(ctx) {
-        const res = await this.getMatchUser();
+        const res = await getMatchUser(ctx);
         if(!res){
             return
         }
