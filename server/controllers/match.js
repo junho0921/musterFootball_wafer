@@ -15,7 +15,7 @@ class MatchController {
         try{
             match_id = JSON.parse(match_id)
         }catch (e){}
-        let matchs = await ctx_service.match.find({
+        let matchs = await ctx_service.match.get({
             where: {match_id}
         });
         if(!matchs || !matchs.length){
@@ -32,8 +32,7 @@ class MatchController {
             }
             return sum;
         }, []);
-        let membersInfo = await ctx_service.user.find({
-            columns: ['name', 'wx_img', 'real_name', 'open_id'],
+        let membersInfo = await ctx_service.user.({
             where: {
                 open_id: members_openIds
             }

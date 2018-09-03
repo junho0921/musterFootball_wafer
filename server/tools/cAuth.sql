@@ -66,7 +66,7 @@ CREATE TABLE `matchs` (
   `leader` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `max_numbers` int(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `max_numbers` int(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `canceled` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `canceled_reason` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
   `position` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
