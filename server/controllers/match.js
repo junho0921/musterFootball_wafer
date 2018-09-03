@@ -1,6 +1,6 @@
 'use strict';
 
-const {splitWord} = require('../../config/CONST');
+const {splitWord} = require('../tools/CONST');
 const ctx_service = require('../service');
 
 class MatchController {
