@@ -8,7 +8,7 @@ class MatchController {
         const query = ctx.query;
         let match_id = query.id;
         if (!match_id){
-            ctx.body = new Error('参数错误');
+            throw new Error('参数错误');
             return
         }
         try{
@@ -18,7 +18,7 @@ class MatchController {
             where: {match_id}
         });
         if(!matchs || !matchs.length){
-            ctx.body = new Error('没有比赛信息');
+            throw new Error('没有比赛信息');
             return;
         }
         let members_openIds = matchs.reduce((sum, item) => {
@@ -45,7 +45,7 @@ class MatchController {
                 })
             }
         });
-        ctx.body = matchs;
+        ctx.state.data = matchs;
     }
 
     async cancel(ctx){
@@ -57,12 +57,12 @@ class MatchController {
         const canceled_reason = ctx.query.reason;
 
         if (matchInfo.leader != open_id){
-            ctx.body = new Error('您不是比赛的发起者，不能取消比赛');
+            throw new Error('您不是比赛的发起者，不能取消比赛');
             return
         }
 
         if (!canceled_reason){
-            ctx.body = new Error('取消比赛须提交取消理由');
+            throw new Error('取消比赛须提交取消理由');
             return
         }
 
@@ -73,17 +73,17 @@ class MatchController {
             where:{match_id}
         });
         if (!cancelSuccess){
-            ctx.body = new Error('取消失败');
+            throw new Error('取消失败');
             return
         }
-        ctx.body = 1
+        ctx.state.data = 1
     }
 
     async getMatchUser (ctx) {
         const query = ctx.query;
         let match_id = query.id;
         if (!match_id){
-            ctx.body = new Error('参数错误');
+            throw new Error('参数错误');
             return
         }
         if (ctx.state.$wxInfo.loginState !== 1) {
@@ -148,7 +148,7 @@ class MatchController {
             throw new Error('更新个人报名信息报错');
             return
         }
-        ctx.body = 1
+        ctx.state.data = 1
     }
 
     async regret(ctx) {
@@ -160,7 +160,7 @@ class MatchController {
 
         // 查询当前用户是否已经报名此比赛
         if (!matchInfo.members.includes(userInfo.open_id)) {
-            ctx.body = new Error('您还没有报名');
+            throw new Error('您还没有报名');
             return
         }
 
@@ -170,7 +170,7 @@ class MatchController {
             where: {match_id}
         });
         if (!updateMatchSuccess) {
-            ctx.body = new Error('抱歉，取消报名失败');
+            throw new Error('抱歉，取消报名失败');
             return
         }
 
@@ -181,10 +181,10 @@ class MatchController {
             where: {open_id}
         });
         if (!updateUserSuccess) {
-            ctx.body = new Error('更新个人报名信息报错')
+            throw new Error('更新个人报名信息报错')
             return
         }
-        ctx.body = 1;
+        ctx.state.data = 1;
     }
 
     async muster(ctx) {
@@ -251,13 +251,13 @@ class MatchController {
         const data = ctx.request.body;
         // 参数校验
         if (!data.date || !data.position || !data.match_id) {
-            ctx.body = new Error('数据填写有误');
+            throw new Error('数据填写有误');
             return
         }
         // 查询当前登录用户信息
         const userInfo = await ctx_service.user.get({where: {open_id}});
         if (!userInfo) {
-            ctx.body = new Error('获取当前用户信息异常');
+            throw new Error('获取当前用户信息异常');
             return
         }
         const match_id = data.match_id;
@@ -270,10 +270,10 @@ class MatchController {
             where: {match_id}
         });
         if (!ret) {
-            ctx.body = new Error('更新比赛信息失败');
+            throw new Error('更新比赛信息失败');
             return
         }
-        ctx.body = 1;
+        throw 1;
     }
 }
 
