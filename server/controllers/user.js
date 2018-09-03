@@ -4,10 +4,8 @@ const ctx_service = require('../service');
 
 class UserController {
     async login(ctx) {
-        if (ctx.state.$wxInfo.loginState !== 11) {
-            let msg = '登陆状态失败';
-            ctx.state.code = -1;
-            ctx.state.data = {msg};
+        if (ctx.state.$wxInfo.loginState !== 1) {
+            throw new Error('登陆状态失败');
             return;
         }
         let data = ctx.state.$wxInfo.userinfo;
@@ -52,16 +50,14 @@ class UserController {
 
     async update(ctx) {
         if (ctx.state.$wxInfo.loginState !== 1) {
-            let msg = '登录态校验失败';
-            ctx.state.code = -1;
-            ctx.state.data = {msg};
+            throw new Error('登陆状态失败');
             return;
         }
         const data = ctx.query;
         const open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
         const ret = await ctx_service.user.update({
-            phone: data.phone || 0,
-            real_name: data.real_name || ''
+            phone: data.phone,
+            real_name: data.real_name
         }, {
             where: {open_id}
         });
