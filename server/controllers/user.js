@@ -6,10 +6,12 @@ class UserController {
     async login() {
         const { ctx } = this;
         if (ctx.state.$wxInfo.loginState !== 1) {
-            ctx.body = new Error('登陆状态失败');
+            // ctx.body = new Error('登陆状态失败');
+            ctx.state.code = -1;
             return;
         }
         let data = ctx.state.$wxInfo.userinfo;
+        console.log('data', data);
         const open_id = data.open_id;
         // 维护一套用户信息数据库，区别与微信cSessionInfo数据库
         let userInfo = await ctx_service.user.get({open_id});
@@ -43,7 +45,8 @@ class UserController {
         }
         data.p_user_info = userInfo;
         // 必须返回auth中间件的数据，这样才能被微信识别skey
-        ctx.body = data;
+        ctx.state.data = data;
+        // ctx.body = data;
     }
 
     async update() {

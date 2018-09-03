@@ -32,7 +32,7 @@ class MatchController {
             }
             return sum;
         }, []);
-        let membersInfo = await ctx_service.user.({
+        let membersInfo = await ctx_service.user.get({
             where: {
                 open_id: members_openIds
             }
