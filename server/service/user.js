@@ -10,7 +10,7 @@ class UserService {
      */
     async get(options) {
         return mysql(TABLE_NAME)
-            .get(TABLE_NAME)
+            .select('*')
             .where(options.where)
             .catch(e => {
                 throw new Error(`get ${TABLE_NAME} fail\n${e}`)

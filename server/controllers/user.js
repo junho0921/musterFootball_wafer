@@ -3,25 +3,25 @@ const moment = require('moment');
 const ctx_service = require('../service');
 
 class UserController {
-    async login() {
-        const { ctx } = this;
-        if (ctx.state.$wxInfo.loginState !== 1) {
-            // ctx.body = new Error('登陆状态失败');
+    async login(ctx) {
+        if (ctx.state.$wxInfo.loginState !== 11) {
+            let msg = '登陆状态失败';
             ctx.state.code = -1;
+            ctx.state.data = {msg};
             return;
         }
         let data = ctx.state.$wxInfo.userinfo;
-        console.log('data', data);
-        const open_id = data.open_id;
+        const open_id = data.userinfo.openId;
         // 维护一套用户信息数据库，区别与微信cSessionInfo数据库
-        let userInfo = await ctx_service.user.get({open_id});
+        let userInfo = await ctx_service.user.get({where:{open_id}});
+        userInfo = userInfo && userInfo[0];
         const last_login_time = moment().format('YYYY-MM-DD HH:mm:ss');
         if (!userInfo) {
             userInfo = {
                 open_id,
-                phone: '',
-                wx_img: data.user_info.wx_img || '',
-                name: data.user_info.name || '未知用户',
+                phone: 0,
+                wx_img: data.userinfo.avatarUrl || '',
+                name: data.userinfo.nickName || '未知用户',
                 last_login_time,
                 real_name: '',
                 join_match: '',
@@ -32,7 +32,9 @@ class UserController {
             };
             const ret = await ctx_service.user.add(userInfo);
             if (!ret) {
-                ctx.body = new Error('注册用户信息失败');
+                let msg = '注册用户信息失败';
+                ctx.state.code = -1;
+                ctx.state.data = {msg};
                 return;
             }
         } else {
@@ -46,27 +48,30 @@ class UserController {
         data.p_user_info = userInfo;
         // 必须返回auth中间件的数据，这样才能被微信识别skey
         ctx.state.data = data;
-        // ctx.body = data;
     }
 
-    async update() {
-        const { ctx } = this;
+    async update(ctx) {
         if (ctx.state.$wxInfo.loginState !== 1) {
-            ctx.body = new Error('登录态校验失败');
+            let msg = '登录态校验失败';
+            ctx.state.code = -1;
+            ctx.state.data = {msg};
             return;
         }
-        const {open_id} = ctx.state.$wxInfo.userinfo;
-        const data = ctx.request.body;
+        const data = ctx.query;
+        const open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
         const ret = await ctx_service.user.update({
-            phone: data.phone || 888,
+            phone: data.phone || 0,
             real_name: data.real_name || ''
         }, {
             where: {open_id}
         });
         if (ret) {
-            ctx.body = 1;
+            ctx.state.data = 1;
         } else {
-            ctx.body = new Error('保存失败');
+            let msg = '保存失败';
+            ctx.state.code = -1;
+            ctx.state.data = {msg};
+            return;
         }
     }
 }

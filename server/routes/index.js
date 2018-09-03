@@ -12,7 +12,8 @@ const { auth: { authorizationMiddleware, validationMiddleware } } = require('../
 
 // --- 登录与授权 Demo --- //
 // 登录接口 /weapp/login
-// router.get('/login', authorizationMiddleware, controllers.login)
+router.get('/user/login', authorizationMiddleware, controllers.user.login)
+router.get('/user/update', validationMiddleware, controllers.user.update)
 // 用户信息接口（可以用来验证登录态） /weapp/user
 // router.get('/user', validationMiddleware, controllers.user)
 
@@ -33,14 +34,14 @@ router.get('/message', controllers.message.get)
 router.post('/message', controllers.message.post)
 
 // 用户
-router.get('/api/user/login', authorizationMiddleware, controllers.user.login);
-router.post('/api/user/update', validationMiddleware, controllers.user.update);
+// router.get('/user/login', authorizationMiddleware, controllers.user.login);
+// router.post('/user/update', validationMiddleware, controllers.user.update);
 // 比赛
-router.post('/api/match/muster', validationMiddleware, controllers.match.muster);
-router.post('/api/match/edit', validationMiddleware, controllers.match.edit);
-router.get('/api/match/cancel', validationMiddleware, controllers.match.cancel);
-router.get('/api/match/join', validationMiddleware, controllers.match.join);
-router.get('/api/match/regret', validationMiddleware, controllers.match.regret);
-router.get('/api/match/get', controllers.match.get);
+router.post('/match/muster', validationMiddleware, controllers.match.muster);
+router.post('/match/edit', validationMiddleware, controllers.match.edit);
+router.get('/match/cancel', validationMiddleware, controllers.match.cancel);
+router.get('/match/join', validationMiddleware, controllers.match.join);
+router.get('/match/regret', validationMiddleware, controllers.match.regret);
+router.get('/match/get', controllers.match.get);
 
 module.exports = router
