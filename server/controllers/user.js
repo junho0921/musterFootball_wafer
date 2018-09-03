@@ -30,9 +30,7 @@ class UserController {
             };
             const ret = await ctx_service.user.add(userInfo);
             if (!ret) {
-                let msg = '注册用户信息失败';
-                ctx.state.code = -1;
-                ctx.state.data = {msg};
+                throw new Error('注册用户信息失败');
                 return;
             }
         } else {
@@ -64,9 +62,7 @@ class UserController {
         if (ret) {
             ctx.state.data = 1;
         } else {
-            let msg = '保存失败';
-            ctx.state.code = -1;
-            ctx.state.data = {msg};
+            throw new Error('保存失败');
             return;
         }
     }
