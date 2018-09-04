@@ -18,14 +18,12 @@ const getMatchUser  = async (ctx) => {
     let open_id = data.userinfo.openId;
     // 查询当前登录用户信息
     let userInfo = await ctx_service.user.get({where: {open_id}});
-    userInfo = userInfo && userInfo[0];
     if (!userInfo) {
         throw new Error('请先登陆');
         return;
     }
     // 查询比赛信息
     let matchInfo = await ctx_service.match.get({where: {match_id}});
-    matchInfo = matchInfo && matchInfo[0];
     if (!matchInfo) {
         throw new Error('无此比赛信息');
         return
@@ -123,11 +121,9 @@ class MatchController {
         }
 
         // 更新比赛成员信息
-        if(matchInfo.members.length > 0){
-            matchInfo.members += splitWord
-        }
-        matchInfo.members += open_id;
-        const updateMatchSuccess = await ctx_service.match.update(matchInfo, {
+        const updateMatchSuccess = await ctx_service.match.update({
+            members: (matchInfo.members || '') + (matchInfo.members ? splitWord : '') + open_id
+        }, {
             where: {match_id}
         });
         if (!updateMatchSuccess) {
@@ -136,8 +132,9 @@ class MatchController {
         }
 
         // 更新个人报名信息
-        userInfo.join_match += (userInfo.join_match && splitWord || '') + match_id;
-        const updateUserSuccess = await ctx_service.user.update(userInfo, {
+        const updateUserSuccess = await ctx_service.user.update({
+            join_match: (userInfo.join_match || '') + (userInfo.join_match && splitWord || '') + match_id
+        }, {
             where: {open_id}
         });
         if (!updateUserSuccess) {
@@ -161,8 +158,9 @@ class MatchController {
         }
 
         // 更新比赛成员信息
-        matchInfo.members = matchInfo.members.split(splitWord).filter(item => item != open_id).join(splitWord);
-        const updateMatchSuccess = await ctx_service.match.update(matchInfo, {
+        const updateMatchSuccess = await ctx_service.match.update({
+            members: matchInfo.members.split(splitWord).filter(item => item != open_id).join(splitWord)
+        }, {
             where: {match_id}
         });
         if (!updateMatchSuccess) {
@@ -171,13 +169,14 @@ class MatchController {
         }
 
         // 更新个人报名信息
-        userInfo.join_match = userInfo.join_match.split(splitWord).filter(item => item != match_id).join(splitWord);
-        userInfo.regret_join_match += (userInfo.regret_join_match && splitWord || '') + match_id;
-        const updateUserSuccess = await ctx_service.user.update(userInfo, {
+        const updateUserSuccess = await ctx_service.user.update({
+            join_match: userInfo.join_match.split(splitWord).filter(item => item != match_id).join(splitWord),
+            regret_join_match: (userInfo.regret_join_match || '') + (userInfo.regret_join_match && splitWord || '') + match_id
+        }, {
             where: {open_id}
         });
         if (!updateUserSuccess) {
-            throw new Error('更新个人报名信息报错')
+            throw new Error('更新个人报名信息报错');
             return
         }
         ctx.state.data = 1;
@@ -197,7 +196,6 @@ class MatchController {
         }
         // 查询当前登录用户信息
         let userInfo = await ctx_service.user.get({where: {open_id}});
-        userInfo = userInfo && userInfo[0];
         if (!userInfo) {
             throw new Error('获取当前用户信息异常');
             return;

@@ -12,6 +12,7 @@ class UserService {
         return mysql(TABLE_NAME)
             .select('*')
             .where(options.where)
+            .then(res => res && res[0] || null)
             .catch(e => {
                 throw new Error(`get ${TABLE_NAME} fail\n${e}`)
             });

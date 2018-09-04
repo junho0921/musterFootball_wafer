@@ -12,7 +12,6 @@ class UserController {
         const open_id = data.userinfo.openId;
         // 维护一套用户信息数据库，区别与微信cSessionInfo数据库
         let userInfo = await ctx_service.user.get('open_id', open_id);
-        userInfo = userInfo && userInfo[0];
         const last_login_time = moment().format('YYYY-MM-DD HH:mm:ss');
         if (!userInfo) {
             userInfo = {
