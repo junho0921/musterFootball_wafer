@@ -149,7 +149,8 @@ class MatchController {
 
         // 更新个人报名信息
         const updateUserSuccess = await ctx_service.user.update({
-            join_match: (userInfo.join_match || '') + (userInfo.join_match && splitWord || '') + match_id
+            join_match: (userInfo.join_match || '') + (userInfo.join_match && splitWord || '') + match_id,
+            regret_join_match: userInfo.regret_join_match.split(splitWord).filter(i => i != match_id).join(splitWord)
         }, {
             where: {open_id}
         });
