@@ -21,7 +21,7 @@ const CONF = {
         port: 3306,
         user: 'root',
         db: 'cAuth',
-        pass: '26679415',
+        pass: '',
         char: 'utf8mb4'
     },
 
@@ -41,6 +41,4 @@ const CONF = {
     wxLoginExpires: 7200
 }
 
-let sss = Object.assign({}, CONF, require('./config.local'));
-
-module.exports = process.env.NODE_ENV === 'local' ?  sss : CONF;
+module.exports = process.env.NODE_ENV === 'local' ?  Object.assign({}, CONF, require('./config.local')) : CONF;
