@@ -258,7 +258,7 @@ class MatchController {
             return;
         }
         let open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
-        const data = ctx.request.body;
+        const data = ctx.query;
         // 参数校验
         if (!data.date || !data.position || !data.match_id) {
             throw new Error('数据填写有误');
@@ -283,7 +283,7 @@ class MatchController {
             throw new Error('更新比赛信息失败');
             return
         }
-        throw 1;
+        ctx.state.data = 1;
     }
 }
 
