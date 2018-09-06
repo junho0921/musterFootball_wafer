@@ -8,10 +8,10 @@ class UserService {
     /**
      * 获取
      */
-    async get(options) {
+    async get(where) {
         return mysql(TABLE_NAME)
             .select('*')
-            .where(options.where)
+            .where(where)
             .then(res => res && res[0] || null)
             .catch(e => {
                 throw new Error(`get ${TABLE_NAME} fail\n${e}`)
@@ -25,7 +25,7 @@ class UserService {
             .select('*')
             .whereIn(key, value)
             .catch(e => {
-                throw new Error(`get ${TABLE_NAME} fail\n${e}`)
+                throw new Error(`getAll ${TABLE_NAME} fail\n${e}`)
             });
     }
     /**

@@ -17,13 +17,13 @@ const getMatchUser  = async (ctx) => {
     let data = ctx.state.$wxInfo.userinfo;
     let open_id = data.userinfo.openId;
     // 查询当前登录用户信息
-    let userInfo = await ctx_service.user.get({where: {open_id}});
+    let userInfo = await ctx_service.user.get({open_id});
     if (!userInfo) {
         throw new Error('请先登陆');
         return;
     }
     // 查询比赛信息
-    let matchInfo = await ctx_service.match.get({where: {match_id}});
+    let matchInfo = await ctx_service.match.get({match_id});
     if (!matchInfo) {
         throw new Error('无此比赛信息');
         return
@@ -88,6 +88,11 @@ class MatchController {
             return
         }
 
+        if (matchInfo.canceled == 1){
+            throw new Error('比赛已经取消');
+            return
+        }
+
         let cancelSuccess = await ctx_service.match.update(Object.assign({}, matchInfo, {
             canceled: 1,
             canceled_reason
@@ -97,6 +102,17 @@ class MatchController {
         if (!cancelSuccess){
             throw new Error('取消失败');
             return
+        }
+        // 更新个人组队信息
+        const userRet = await ctx_service.user.update({
+            muster_match: userInfo.muster_match.split(splitWord).filter(i => i != match_id).join(splitWord),
+            cancel_muster_match: (userInfo.cancel_muster_match || '') + (userInfo.cancel_muster_match && splitWord || '') + match_id
+        }, {
+            where: {open_id}
+        });
+        if (!userRet) {
+            throw new Error('更新个人组队信息失败');
+            return;
         }
         ctx.state.data = 1
     }
@@ -195,7 +211,7 @@ class MatchController {
             return;
         }
         // 查询当前登录用户信息
-        let userInfo = await ctx_service.user.get({where: {open_id}});
+        let userInfo = await ctx_service.user.get({open_id});
         if (!userInfo) {
             throw new Error('获取当前用户信息异常');
             return;
@@ -249,7 +265,7 @@ class MatchController {
             return
         }
         // 查询当前登录用户信息
-        const userInfo = await ctx_service.user.get({where: {open_id}});
+        const userInfo = await ctx_service.user.get({open_id});
         if (!userInfo) {
             throw new Error('获取当前用户信息异常');
             return
