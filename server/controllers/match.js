@@ -15,7 +15,7 @@ const getMatchUser  = async (ctx) => {
         return;
     }
     let data = ctx.state.$wxInfo.userinfo;
-    let open_id = data.userinfo.openId;
+    let open_id = data.openId;
     // 查询当前登录用户信息
     let userInfo = await ctx_service.user.get({open_id});
     if (!userInfo) {
@@ -204,7 +204,7 @@ class MatchController {
             throw new Error('登陆状态失败');
             return;
         }
-        let open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
+        let open_id = ctx.state.$wxInfo.userinfo.openId;
         const data = ctx.query;
         // 参数校验
         if (!data.date || !data.position) {
@@ -258,7 +258,7 @@ class MatchController {
             throw new Error('登陆状态失败');
             return;
         }
-        let open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
+        let open_id = ctx.state.$wxInfo.userinfo.openId;
         const data = ctx.query;
         // 参数校验
         if (!data.date || !data.position || !data.match_id) {

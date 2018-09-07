@@ -51,7 +51,7 @@ class UserController {
             return;
         }
         const data = ctx.query;
-        const open_id = ctx.state.$wxInfo.userinfo.userinfo.openId;
+        const open_id = ctx.state.$wxInfo.userinfo.openId;
         const ret = await ctx_service.user.update({
             phone: data.phone,
             real_name: data.real_name
