@@ -100,6 +100,29 @@ Page({
         showSuccess('会话已清除');
     },
 
+    muster(){
+        qcloud.request({
+            // 要请求的地址
+            url: config.service.muster,
+
+            // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
+            login: true,
+
+            success(result) {
+                showSuccess('请求成功完成');
+                console.log('request success', result);
+            },
+
+            fail(error) {
+                showModel('请求失败', error);
+                console.log('request fail', error);
+            },
+
+            complete() {
+                console.log('request complete');
+            }
+        });
+    },
     /**
      * 点击「请求」按钮，测试带会话请求的功能
      */

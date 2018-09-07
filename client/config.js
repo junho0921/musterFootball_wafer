@@ -3,7 +3,7 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-var host = 'https://123456.qcloud.la';
+var host = 'https://nowh3lrj.qcloud.la';
 
 var config = {
 
@@ -21,7 +21,15 @@ var config = {
         tunnelUrl: `${host}/weapp/tunnel`,
 
         // 上传图片接口
-        uploadUrl: `${host}/weapp/upload`
+        uploadUrl: `${host}/weapp/upload`,
+
+        update: `${host}/weapp/user/update`,
+        muster: `${host}/weapp/match/muster`,
+        cancel: `${host}/weapp/match/cancel`,
+        regret: `${host}/weapp/match/regret`,
+        join: `${host}/weapp/match/join`,
+        edit: `${host}/weapp/match/edit`,
+        get: `${host}/weapp/match/get`
     }
 };
 

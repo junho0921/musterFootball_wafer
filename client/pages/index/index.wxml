@@ -18,6 +18,12 @@
         </view>
     </view>
     <view class="line">
+        <text>发起比赛</text>
+        <view class="line-control">
+            <view bindtap="muster" class="item" ><view class="item-inner">请求</view></view>
+        </view>
+    </view>
+    <view class="line">
         <text>上传图片测试</text>
         <view class="line-control">
             <view bindtap="doUpload" class="item">
