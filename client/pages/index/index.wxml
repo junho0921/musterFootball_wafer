@@ -18,9 +18,28 @@
         </view>
     </view>
     <view class="line">
+        <text>更新信息</text>
+        <view class="line-control">
+            <view bindtap="update" class="item" ><view class="item-inner">请求</view></view>
+        </view>
+    </view>
+    <view class="line">
         <text>发起比赛</text>
         <view class="line-control">
             <view bindtap="muster" class="item" ><view class="item-inner">请求</view></view>
+        </view>
+    </view>
+    <view class="line">
+        <text>取消比赛</text>
+       	<input type="text" value="{{cancelReason}}" bindchange="cancelInput" placeholder="理由?"/>
+		<view class="line-control">
+            <view bindtap="cancel" class="item" ><view class="item-inner">请求</view></view>
+        </view>
+    </view>
+    <view class="line">
+        <text>查看比赛信息</text>
+        <view class="line-control">
+            <view bindtap="getMatch" class="item" ><view class="item-inner">请求</view></view>
         </view>
     </view>
     <view class="line">

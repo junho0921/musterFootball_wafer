@@ -92,7 +92,7 @@ function login (opts) {
 
                 // 成功地响应会话信息
                 Session.set(res)
-                opts.success(res.userinfo)
+                opts.success(res)
             },
             fail (err) {
                 console.error('登录失败，可能是网络错误或者服务器发生异常')
@@ -149,7 +149,7 @@ function loginWithCode (opts) {
     
                     // 成功地响应会话信息
                     Session.set(res)
-                    opts.success(res.userinfo)
+                    opts.success(res)
                 },
                 fail (err) {
                     console.error('登录失败，可能是网络错误或者服务器发生异常')

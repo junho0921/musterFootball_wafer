@@ -68,7 +68,7 @@ Page({
             // 可使用本函数更新登录态
             qcloud.loginWithCode({
                 success: res => {
-                    this.setData({ userInfo: res, logged: true })
+                    this.setData({ userInfo: res.p_user_info, logged: true });
                     showSuccess('登录成功')
                 },
                 fail: err => {
@@ -80,8 +80,8 @@ Page({
             // 首次登录
             qcloud.login({
                 success: res => {
-                    this.setData({ userInfo: res, logged: true })
-                    showSuccess('登录成功')
+                    this.setData({ userInfo: res.p_user_info, logged: true });
+                  showSuccess('登录成功')
                 },
                 fail: err => {
                     console.error(err)
@@ -103,18 +103,97 @@ Page({
     muster(){
         qcloud.request({
             // 要请求的地址
-            url: config.service.muster,
+            url: `${config.service.muster}?position=333311&date=231111`,
 
             // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
-            login: true,
+            // login: true,
 
             success(result) {
-                showSuccess('请求成功完成');
+                // showSuccess('请求成功完成');
                 console.log('request success', result);
             },
 
             fail(error) {
-                showModel('请求失败', error);
+                // showModel('请求失败', error);
+                console.log('request fail', error);
+            },
+
+            complete() {
+                console.log('request complete');
+            }
+        });
+    },
+
+    update(){
+        qcloud.request({
+            // 要请求的地址
+            url: `${config.service.update}?phone=1666211&real_name=junho`,
+
+            // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
+            // login: true,
+
+            success(result) {
+                // showSuccess('请求成功完成');
+                console.log('request success', result);
+            },
+
+            fail(error) {
+                // showModel('请求失败', error);
+                console.log('request fail', error);
+            },
+
+            complete() {
+                console.log('request complete');
+            }
+        });
+    },
+
+    cancelInput(e, t){
+        this.setData({ cancelReason: e.detail.value });
+    },
+    cancel(){
+        let id = this.data.userInfo.muster_match;
+
+        qcloud.request({
+            // 要请求的地址
+            url: `${config.service.cancel}?id=${id}&reason=${this.data.cancelReason}`,
+
+            // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
+            // login: true,
+
+            success(result) {
+                // showSuccess('请求成功完成');
+                console.log('request success', result);
+            },
+
+            fail(error) {
+                // showModel('请求失败', error);
+                console.log('request fail', error);
+            },
+
+            complete() {
+                console.log('request complete');
+            }
+        });
+    },
+
+  getMatch(){
+        let id = this.data.userInfo.muster_match;
+
+        qcloud.request({
+            // 要请求的地址
+            url: `${config.service.cancel}?id=${id}`,
+
+            // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
+            // login: true,
+
+            success(result) {
+                // showSuccess('请求成功完成');
+                console.log('request success', result);
+            },
+
+            fail(error) {
+                // showModel('请求失败', error);
                 console.log('request fail', error);
             },
 
