@@ -29,7 +29,7 @@ var config = {
         regret: `${host}/weapp/match/regret`,
         join: `${host}/weapp/match/join`,
         edit: `${host}/weapp/match/edit`,
-        get: `${host}/weapp/match/get`
+        getMatch: `${host}/weapp/match/get`
     }
 };
 

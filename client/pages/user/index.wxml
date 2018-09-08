@@ -1,0 +1,21 @@
+<view class="page-section">
+  <view class="weui-cells__title">真实姓名</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_input">
+      <input class="weui-input" data-key='real_name' value="{{real_name}}" bindchange="bindInput" maxlength="10" placeholder="输入让朋友可认得出的名称哦"/>
+    </view>
+  </view>
+</view>
+
+<view class="page-section">
+  <view class="weui-cells__title">联系电话</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_input">
+      <input class="weui-input" data-key='phone' value="{{phone}}" bindchange="bindInput" placeholder="输入让朋友可及时通知你的电话哦" />
+    </view>
+  </view>
+</view>
+
+<view>
+  <button type="primary" size="default" loading="{{loading}}" disabled="{{disabled}}" bindtap="primary" bindtap="submit">submit</button>
+</view>

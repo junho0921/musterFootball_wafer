@@ -1,87 +1,64 @@
+// 引入 QCloud 小程序增强 SDK
+const qcloud = require('../vendor/wafer2-client-sdk/index');
+const config = require('../config.js');
 const REQ = {};
-const fetchByLogin = function(){
-    // 为了测试，添加用户类型type
-    if(typeof arguments[0] === 'string'){
-        arguments[0]+= arguments[0].includes('?') ? '&' : '?';
-        arguments[0]+= `skey=${app.userType}`;
+const objToJSON = data => 
+  Object.keys(data).map(key => {
+    let value = data[key];
+    value = typeof value === 'object' ? JOSN.stringify(value) : value;
+    return `${key}=${value}`;
+  }).join('&');
+const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
+  qcloud.request({
+    url: `${url}?${objToJSON(data)}`,
+    success: (res) => {
+      if (res.data && res.data.code == 0){
+        resolve(res.data.data);
+      }else{
+        reject(res.data && res.data.msg || '服务器错误')
+      }
+    },
+    fail: (e) => {
+      reject(JSON.stringify(e))
     }
-    return window.fetch.apply(this, arguments);
-};
-// 成员参加比赛
-REQ.joinMatch = (matchId) =>
-    fetchByLogin(`/api/match/join?id=${matchId}`)
-        .then((response) => {
-            //返回 object 类型
-            return response.json();
-        });
-// 成员取消比赛
-REQ.regretMatch = (matchId) =>
-    fetchByLogin(`/api/match/regret?id=${matchId}`)
-        .then((response) => {
-            //返回 object 类型
-            return response.json();
-        });
-// 获取用户信息
-REQ.getInfo = () =>
-    fetchByLogin(`/api/user/login`)
-        .then(res => res.json());
+  });
+});
+const requestWidthoutUserInfo = url => data => new Promise((resolve, reject) => {
+  wx.request({
+    url: `${url}?${objToJSON(data)}`,
+    success: (res) => {
+      if (res.data && res.data.code == 0) {
+        resolve(res.data.data);
+      } else {
+        reject(res.data && res.data.msg || '服务器错误')
+      }
+    },
+    fail: (e) => {
+      reject(JSON.stringify(e))
+    }
+  });
+});
+
 // 更新用户信息
-REQ.updateInfo = (userInfo) =>
-    fetchByLogin('/api/user/update', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userInfo)
-    }).then((response) => {
-        //返回 object 类型
-        return response.json();
-    });
+REQ.updateInfo = requestWidthUserInfo(config.service.update);
 // 发起比赛
-REQ.musterMatch = data =>
-    fetchByLogin('/api/match/muster', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then((response) => {
-        //返回 object 类型
-        return response.json();
-    });
-// 编辑比赛
-REQ.editMatch = data =>
-    fetchByLogin('/api/match/edit', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then((response) => {
-        //返回 object 类型
-        return response.json();
-    });
-// 获取比赛信息
-REQ.getMatchInfo = (idList) =>
-    fetch(`/api/match/get?id=${JSON.stringify(idList.split(','))}`).then((response) => {
-        //返回 object 类型
-        return response.json();
-    });
+REQ.musterMatch = requestWidthUserInfo(config.service.muster);
 // 取消比赛
-REQ.cancelMatch = (matchId, reason) =>
-    fetchByLogin(`/api/match/cancel?id=${matchId}&reason=${reason}`).then((response) => {
-        //返回 object 类型
-        return response.json();
-    });
+REQ.cancelMatch = requestWidthUserInfo(config.service.cancel);
+// 编辑比赛
+REQ.editMatch = requestWidthUserInfo(config.service.edit);
+// 成员参加比赛
+REQ.joinMatch = requestWidthUserInfo(config.service.join);
+// 成员取消比赛
+REQ.regretMatch = requestWidthUserInfo(config.service.regret);
+// 获取比赛信息
+REQ.getMatchInfo = requestWidthoutUserInfo(config.service.getMatch);
 
 const REQ_DURATION = 3 * 1000;
 const REQ_TIMER = () => new Promise((r) =>
-    window.setTimeout(() => {
-        r({code:1, msg: '请求超时'});
-    }, REQ_DURATION)
+  setTimeout(() => {
+    r({ code: -1, msg: '请求超时' });
+  }, REQ_DURATION)
 );
 Object.keys(REQ).forEach(key => {
     let item = REQ[key];
@@ -95,3 +72,5 @@ const failMsg = result => {
         return result && result.msg || '服务器错误';
     }
 };
+
+module.exports = REQ;

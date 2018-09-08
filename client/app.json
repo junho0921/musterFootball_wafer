@@ -1,6 +1,9 @@
 {
     "pages": [
         "pages/index/index",
+        "pages/form/index",
+        "pages/user/index",
+        "pages/muster/index",
         "pages/chat/chat"
     ],
     "window": {
