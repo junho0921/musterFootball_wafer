@@ -23,6 +23,7 @@ var config = {
         // 上传图片接口
         uploadUrl: `${host}/weapp/upload`,
 
+        getUser: `${host}/weapp/user/get`,
         update: `${host}/weapp/user/update`,
         muster: `${host}/weapp/match/muster`,
         cancel: `${host}/weapp/match/cancel`,

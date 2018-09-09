@@ -22,7 +22,6 @@ class UserController {
                 last_login_time,
                 real_name: '',
                 join_match: '',
-                match_tips: '',
                 regret_join_match: '',
                 cancel_muster_match: '',
                 muster_match: ''
@@ -43,6 +42,21 @@ class UserController {
         data.p_user_info = userInfo;
         // 必须返回auth中间件的数据，这样才能被微信识别skey
         ctx.state.data = data;
+    }
+
+    async get(ctx) {
+        if (ctx.state.$wxInfo.loginState !== 1) {
+            throw new Error('登陆状态失败');
+            return;
+        }
+        const open_id = ctx.state.$wxInfo.userinfo.openId;
+        if(open_id){
+            let data = await ctx_service.user.get({ open_id });
+            ctx.state.data = data;
+        }else{
+            throw new Error('用户信息获取失败');
+            return;
+        }
     }
 
     async update(ctx) {

@@ -1,6 +1,6 @@
 'use strict';
 
-const {splitWord} = require('../tools/CONST');
+const {splitWord, matchStatus} = require('../tools/CONST');
 const ctx_service = require('../service');
 
 const getMatchUser  = async (ctx) => {
@@ -94,7 +94,7 @@ class MatchController {
         }
 
         let cancelSuccess = await ctx_service.match.update(Object.assign({}, matchInfo, {
-            canceled: 1,
+            status: matchStatus.CANCEL,
             canceled_reason
         }), {
             where:{match_id}
@@ -137,7 +137,11 @@ class MatchController {
         }
 
         // 更新比赛成员信息
+        let numbers = matchInfo.members.split(splitWord).length;
+        let status = numbers >= matchInfo.min_numbers ? matchStatus.ENOUGH : matchStatus.PENDING;
+        status = numbers <= matchInfo.max_numbers ? matchStatus.FULL : matchStatus.PENDING;
         const updateMatchSuccess = await ctx_service.match.update({
+            status,
             members: (matchInfo.members || '') + (matchInfo.members ? splitWord : '') + open_id
         }, {
             where: {match_id}
@@ -226,13 +230,18 @@ class MatchController {
         // 创建比赛id
         const match_id = 'mid_' + Date.now();
         const ret = await ctx_service.match.add({
+            // 比赛信息
             match_id,
-            leader: open_id,
-            type: data.type || 5,
             date: data.date,
-            max_numbers: data.maxNumbers || 100,
+            max_numbers: data.max_numbers,
+            min_numbers: data.min_numbers,
             position: data.position,
-            canceled: 0,
+            time: data.time,
+            match_tips: data.match_tips,
+            type: data.type,
+            // 附属信息
+            leader: open_id,
+            status: matchStatus.PENDING,
             canceled_reason: '',
             members: open_id,
         });

@@ -4,7 +4,7 @@
 
 // 引入 QCloud 小程序增强 SDK
 var qcloud = require('../../vendor/wafer2-client-sdk/index');
-
+var REQ = require('../../common/request.js');
 // 引入配置
 var config = require('../../config');
 
@@ -91,5 +91,9 @@ Page({
       urls: [this.data.imgUrl]
     })
   },
+
+  getUserInfo(){
+    REQ.getUserInfo().then(res => console.log(11, res))
+  }
 
 });

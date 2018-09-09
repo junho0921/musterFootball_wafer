@@ -17,9 +17,13 @@
        <navigator url='/pages/user/index' hover-class="navigator-hover">添加您的信息</navigator>
     </view>
     <view class="line" wx:if="{{userInfo && userInfo.muster_match}}">
-       <navigator url='/pages/muster/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
+       <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
     </view>
-    <!-- <view class="line" wx:if="{{userInfo && userInfo.join_match}}">
-       <navigator url='/pages/join/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
-    </view> -->
+    
+    <view class="line">
+      <button bindtap='getUserInfo'>获取用户信息</button>   
+    </view>
+    <view class="line" wx:if="{{userInfo && userInfo.join_match}}">
+       <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
+    </view>
 </view>

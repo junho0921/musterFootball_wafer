@@ -1,0 +1,21 @@
+
+<view wx:for="{{list}}" wx:for-index="idx" wx:for-item="item">
+  {{idx}} {{item.date}}
+  <view class="page-section page-section-gap" wx:if="{{item.position && item.position.latitude}}">
+    <view>{{item.position.name}}</view>
+    <map
+      style="width: 100%; height: 100px;"
+      latitude="{{item.position.latitude}}"
+      longitude="{{item.position.longitude}}"
+      show-location
+    ></map>
+  </view>
+  <view>参与人数: {{item.members.length}} 人</view>
+  <view>状态: {{item.statusName}}</view>
+  <view class="line">
+    <navigator url='/pages/members/index?id={{item.match_id}}' hover-class="navigator-hover">看看成员信息</navigator>
+  </view>
+  <view>
+    <button class="shareMatch" data-match="${item.match_id}">邀请同伴</button>
+  </view>
+</view>

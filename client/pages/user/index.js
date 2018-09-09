@@ -22,6 +22,8 @@ Page({
         real_name: info.real_name,
         phone: info.phone,
       });
+    }else{
+      showModel('获取用户信息失败');
     }
   },
   bindInput: function (e) {

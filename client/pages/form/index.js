@@ -9,18 +9,19 @@ Page({
   data: {
     // 表格数据
     match_id: '',
+    min_numbers: '10',
     max_numbers: '30',
     position: '天河',
     type: '5',
     date: '2016-09-01',
-    // todo server add
     time: '12:01',
-    matchTips: '',
+    match_tips: '',
     // 状态
     disabled: false,
     loading: false
   },
   onLoad: function (options) {
+    console.log('表格页面收到id', options.id)
     if (options.id){
       REQ.getMatchInfo({
         id: options.id
@@ -31,7 +32,10 @@ Page({
             match_id: info.match_id,
             date: info.date,
             max_numbers: info.max_numbers,
-            position: info.position,
+            min_numbers: info.min_numbers,
+            position: info.position && JSON.parse(info.position),
+            time: info.time,
+            match_tips: info.match_tips,
             type: info.type
           });
         }
@@ -47,6 +51,16 @@ Page({
       console.log('this.data', this.data)
     }
   },
+  pickLocation: function(){
+    wx.chooseLocation({
+      success: (res) => {
+        console.log('position', res)
+        this.setData({
+          position: res
+        });
+      },
+    });
+  },
   submit: function(e){
     let info = this.data;
     let reqMethod = info.match_id ? "editMatch" : "musterMatch";
@@ -54,12 +68,16 @@ Page({
     let data = {
       date: info.date,
       max_numbers: info.max_numbers,
-      position: info.position,
+      min_numbers: info.min_numbers,
+      position: JSON.stringify(info.position),
+      time: info.time,
+      match_tips: info.match_tips,
       type: info.type
     };
     if (info.match_id){
       data.match_id = info.match_id;
     }
+    console.log('submit ', data)
     this.setData({
       loading: true
     });

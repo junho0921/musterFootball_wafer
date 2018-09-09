@@ -3,11 +3,11 @@ const qcloud = require('../vendor/wafer2-client-sdk/index');
 const config = require('../config.js');
 const REQ = {};
 const objToJSON = data => 
-  Object.keys(data).map(key => {
+  typeof data === 'object' ? Object.keys(data).map(key => {
     let value = data[key];
-    value = typeof value === 'object' ? JOSN.stringify(value) : value;
+    value = typeof value === 'object' ? JSON.stringify(value) : value;
     return `${key}=${value}`;
-  }).join('&');
+  }).join('&') : '';
 const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
   qcloud.request({
     url: `${url}?${objToJSON(data)}`,
@@ -15,11 +15,11 @@ const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
       if (res.data && res.data.code == 0){
         resolve(res.data.data);
       }else{
-        reject(res.data && res.data.msg || '服务器错误')
+        reject(res.data && res.data.error || '服务器错误')
       }
     },
     fail: (e) => {
-      reject(JSON.stringify(e))
+      reject(JSON.stringify(e.message))
     }
   });
 });
@@ -41,6 +41,8 @@ const requestWidthoutUserInfo = url => data => new Promise((resolve, reject) => 
 
 // 更新用户信息
 REQ.updateInfo = requestWidthUserInfo(config.service.update);
+// 获取用户信息
+REQ.getUserInfo = requestWidthUserInfo(config.service.getUser);
 // 发起比赛
 REQ.musterMatch = requestWidthUserInfo(config.service.muster);
 // 取消比赛

@@ -3,13 +3,14 @@
         "pages/index/index",
         "pages/form/index",
         "pages/user/index",
-        "pages/muster/index",
-        "pages/chat/chat"
+        "pages/members/index",
+        "pages/musterlist/index",
+        "pages/joinlist/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#333",
-        "navigationBarTitleText": "腾讯云小程序解决方案",
+        "navigationBarTitleText": "组队踢球吧",
         "navigationBarTextStyle": "white"
     }
 }

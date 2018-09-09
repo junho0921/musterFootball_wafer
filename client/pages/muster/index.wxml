@@ -1,3 +1,0 @@
-<view class="page-section">
-  <view class="weui-cells__title">{{list}}</view>
-</view>
