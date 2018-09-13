@@ -1,29 +1,37 @@
 <view class="root">
-   
     <view class="line">
         <text>登录接口测试</text>
         <input type="text" value="{{loginUrl}}" disabled class="hide"></input>
         <view class="line-control">
             <!-- <view bindtap="doLogin" class="item"><view class="item-inner">登录</view></view>  -->
-             <view class="item"><button class="userinfo-nicknam item-inner login-button" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">登录</button></view> 
+            <view class="item"><button class="userinfo-nicknam item-inner login-button" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">登录</button></view>
             <view bindtap="clearSession" class="item"><view class="item-inner">清除登录会话</view></view>
+            <view class="item-inner">
+                <button bindtap='getUserInfo'>获取用户信息</button>
+            </view>
         </view>
     </view>
 
     <view class="line">
-       <navigator url='/pages/form/index?id={{matchId}}' hover-class="navigator-hover">发起一场比赛</navigator>
-    </view>
-    <view class="line" wx:if="{{userInfo && (!userInfo.real_name || !userInfo.phone)}}">
-       <navigator url='/pages/user/index' hover-class="navigator-hover">添加您的信息</navigator>
-    </view>
-    <view class="line" wx:if="{{userInfo && userInfo.muster_match}}">
-       <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
-    </view>
-    
-    <view class="line">
-      <button bindtap='getUserInfo'>获取用户信息</button>   
-    </view>
-    <view class="line" wx:if="{{userInfo && userInfo.join_match}}">
-       <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
+        <view class="line-control">
+            <view class="item-inner">
+                <navigator url='/pages/form/index?id={{matchId}}' hover-class="navigator-hover">发起一场比赛</navigator>
+            </view>
+        </view>
+        <view class="line-control" wx:if="{{userInfo && (!userInfo.real_name || !userInfo.phone)}}">
+            <view class="item-inner">
+                <navigator url='/pages/user/index' hover-class="navigator-hover">添加您的信息</navigator>
+            </view>
+        </view>
+        <view class="line-control" wx:if="{{userInfo && userInfo.muster_match}}">
+            <view class="item-inner">
+                <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
+            </view>
+        </view>
+        <view class="line-control" wx:if="{{userInfo && userInfo.join_match}}">
+            <view class="item-inner">
+                <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
+            </view>
+        </view>
     </view>
 </view>

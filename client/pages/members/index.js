@@ -1,5 +1,4 @@
 var REQ = require('../../common/request.js');
-var appG = require('../../common/global.js');
 let {
   showBusy,
   showSuccess,
