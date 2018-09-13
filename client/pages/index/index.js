@@ -114,7 +114,10 @@ Page({
   },
 
   getUserInfo(){
-    REQ.getUserInfo().then(res => console.log(11, res))
+    REQ.getUserInfo().then(
+      res => showModel('userInfo', JSON.stringify(res)),
+      e => showModel('userInfo error', JSON.stringify(e))
+    )
   },
 
   getNews(){
