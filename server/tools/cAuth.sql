@@ -62,6 +62,8 @@ CREATE TABLE `matchs` (
   `match_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `joinChangeTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `infoChangeTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `leader` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,

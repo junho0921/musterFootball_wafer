@@ -1,5 +1,5 @@
 'use strict';
-
+const moment = require('moment');
 const {splitWord, matchStatus} = require('../tools/CONST');
 const ctx_service = require('../service');
 
@@ -141,6 +141,7 @@ class MatchController {
         let status = numbers >= matchInfo.min_numbers ? matchStatus.ENOUGH : matchStatus.PENDING;
         status = numbers <= matchInfo.max_numbers ? matchStatus.FULL : matchStatus.PENDING;
         const updateMatchSuccess = await ctx_service.match.update({
+            joinChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             status,
             members: (matchInfo.members || '') + (matchInfo.members ? splitWord : '') + open_id
         }, {
@@ -180,6 +181,7 @@ class MatchController {
 
         // 更新比赛成员信息
         const updateMatchSuccess = await ctx_service.match.update({
+            joinChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             members: matchInfo.members.split(splitWord).filter(item => item != open_id).join(splitWord)
         }, {
             where: {match_id}
@@ -239,6 +241,8 @@ class MatchController {
             time: data.time,
             match_tips: data.match_tips,
             type: data.type,
+            joinChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            infoChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             // 附属信息
             leader: open_id,
             status: matchStatus.PENDING,
@@ -282,6 +286,7 @@ class MatchController {
         }
         const match_id = data.match_id;
         const ret = await ctx_service.match.update({
+            infoChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             type: data.type || 5,
             date: data.date,
             max_numbers: data.maxNumbers || 100,
