@@ -13,7 +13,7 @@
   <view>参与人数: {{item.members.length}} 人</view>
   <view>状态: {{item.statusName}}</view>
   <view class="line">
-    <navigator url='/pages/members/index?id={{item.match_id}}' hover-class="navigator-hover">看看成员信息</navigator>
+	<navigator url='/pages/members/index?id={{item.match_id}}&mid={{item.members}}' hover-class="navigator-hover">看看成员信息</navigator>
   </view>
   <view>
     <button class="deleteMatch" data-match="${item.match_id}">取消比赛</button>

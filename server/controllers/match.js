@@ -47,26 +47,6 @@ class MatchController {
             throw new Error('没有比赛信息');
             return;
         }
-        let members_openIds = matchs.reduce((sum, item) => {
-            if(item.leader){
-                sum = sum.concat(item.leader)
-            }
-            if(item.members){
-                item.members = item.members.split(splitWord);
-                sum = sum.concat(item.members);
-            }
-            return sum;
-        }, []);
-        let membersInfo = await ctx_service.user.getAll('open_id', members_openIds);
-        matchs.forEach(item => {
-            item.leader = Object.assign({}, membersInfo.find(i => i.open_id == item.leader));
-            if(item.members){
-                item.members = item.members.map(id => {
-                    let info = Object.assign({}, membersInfo.find(i => i.open_id == id));
-                    return info;
-                })
-            }
-        });
         ctx.state.data = matchs;
     }
 

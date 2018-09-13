@@ -1,14 +1,21 @@
 // 引入 QCloud 小程序增强 SDK
 const qcloud = require('../vendor/wafer2-client-sdk/index');
 const config = require('../config.js');
+const {
+  REQ_DURATION,
+  statusName
+} = require('./const.js');
 const REQ = {};
-const objToJSON = data => 
+const objToJSON = data =>
   typeof data === 'object' ? Object.keys(data).map(key => {
     let value = data[key];
     value = typeof value === 'object' ? JSON.stringify(value) : value;
     return `${key}=${value}`;
   }).join('&') : '';
 const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
+  let timer = setTimeout(() => {
+    resolve({ code: -1, msg: '请求超时' });
+  }, data && data.timeout || REQ_DURATION);
   qcloud.request({
     url: `${url}?${objToJSON(data)}`,
     success: (res) => {
@@ -20,10 +27,16 @@ const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
     },
     fail: (e) => {
       reject(JSON.stringify(e.message))
+    },
+    complete: () => {
+      clearTimeout(timer);
     }
   });
 });
-const requestWidthoutUserInfo = url => data => new Promise((resolve, reject) => {
+const requestWithoutUserInfo = url => data => new Promise((resolve, reject) => {
+  let timer = setTimeout(() => {
+    resolve({ code: -1, msg: '请求超时' });
+  }, data && data.timeout || REQ_DURATION);
   wx.request({
     url: `${url}?${objToJSON(data)}`,
     success: (res) => {
@@ -35,6 +48,9 @@ const requestWidthoutUserInfo = url => data => new Promise((resolve, reject) => 
     },
     fail: (e) => {
       reject(JSON.stringify(e))
+    },
+    complete: () => {
+      clearTimeout(timer);
     }
   });
 });
@@ -43,6 +59,8 @@ const requestWidthoutUserInfo = url => data => new Promise((resolve, reject) => 
 REQ.updateInfo = requestWidthUserInfo(config.service.update);
 // 获取用户信息
 REQ.getUserInfo = requestWidthUserInfo(config.service.getUser);
+// 获取用户信息
+REQ.getMembersInfo = requestWidthUserInfo(config.service.getMembers);
 // 发起比赛
 REQ.musterMatch = requestWidthUserInfo(config.service.muster);
 // 取消比赛
@@ -54,25 +72,25 @@ REQ.joinMatch = requestWidthUserInfo(config.service.join);
 // 成员取消比赛
 REQ.regretMatch = requestWidthUserInfo(config.service.regret);
 // 获取比赛信息
-REQ.getMatchInfo = requestWidthoutUserInfo(config.service.getMatch);
-
-const REQ_DURATION = 3 * 1000;
-const REQ_TIMER = () => new Promise((r) =>
-  setTimeout(() => {
-    r({ code: -1, msg: '请求超时' });
-  }, REQ_DURATION)
-);
-Object.keys(REQ).forEach(key => {
-    let item = REQ[key];
-    REQ[key] = function () {
-        return Promise.race([item.apply(this, arguments), REQ_TIMER()]);
-    };
-});
-
-const failMsg = result => {
-    if(!result || result.code != 0){
-        return result && result.msg || '服务器错误';
+REQ.getMatchInfo = requestWithoutUserInfo(config.service.getMatch);
+// 获取比赛信息(预处理数据)
+REQ.getMatchDetail = function () {
+  return REQ.getMatchInfo.apply(this, arguments).then(res => {
+    let isSuccess = true;
+    try {
+      res.forEach(item => {
+        item.statusName = statusName[item.status];
+      });
+      res.forEach(item => {
+        item.position = JSON.parse(item.position);
+      });
+    } catch (e) {
+      isSuccess = false;
+      console.log('解释比赛信息错误', e);
     }
+    return isSuccess ? res : Promise.reject({ code: -1, msg: '解释比赛信息错误' });
+  })
+
 };
 
 module.exports = REQ;

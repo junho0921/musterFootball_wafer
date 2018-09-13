@@ -59,6 +59,24 @@ class UserController {
         }
     }
 
+
+    async getUser(ctx) {
+        if (ctx.state.$wxInfo.loginState !== 1) {
+            throw new Error('登陆状态失败');
+            return;
+        }
+        let open_ids = ctx.query.id;
+        try{
+          open_ids = JSON.parse(open_ids);
+        }catch (e){}
+        if(!open_ids || !open_ids.length){
+            return new Error('用户信息获取失败');
+        }
+        open_ids = [].concat(open_ids);
+        let data = await ctx_service.user.getAll('open_id', open_ids);
+        ctx.state.data = data;
+    }
+
     async update(ctx) {
         if (ctx.state.$wxInfo.loginState !== 1) {
             throw new Error('登陆状态失败');

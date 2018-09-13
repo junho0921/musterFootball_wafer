@@ -13,7 +13,34 @@
     </view>
 
     <view class="line">
-        <view class="line-control">
+		<view class="line-control">
+			<view bindtap="setRole" data-role='{{leaderRole}}' class="item" wx:if="{{role !== leaderRole}}">
+				<view class="item-inner">我是leader</view>
+			</view>
+			<view bindtap="setRole" data-role='{{memberRole}}' class="item" wx:if="{{role !== memberRole}}">
+				<view class="item-inner">我是member</view>
+			</view>
+		</view>
+	</view>
+
+    <view class="line newsPanel" wx:if="{{newMembersMsg.length || newSettingMsg.length}}">
+        <text>您有新的消息</text>
+		<view class="line-control">
+			<view class="item" wx:if="{{newMembersMsg.length}}">
+				<view wx:for="{{newMembersMsg}}" wx:for-index="idx" wx:for-item="item">
+					<view class="item-inner">{{item}}</view>
+				</view>
+			</view>
+			<view class="item" wx:if="{{newSettingMsg.length}}">
+				<view wx:for="{{newSettingMsg}}" wx:for-index="idx" wx:for-item="item">
+					<view class="item">{{item}}</view>
+				</view>
+			</view>
+		</view>
+	</view>
+
+    <view class="line" wx:if="{{role}}">
+        <view class="line-control" wx:if="{{role === leaderRole}}">
             <view class="item-inner">
                 <navigator url='/pages/form/index?id={{matchId}}' hover-class="navigator-hover">发起一场比赛</navigator>
             </view>
@@ -23,12 +50,12 @@
                 <navigator url='/pages/user/index' hover-class="navigator-hover">添加您的信息</navigator>
             </view>
         </view>
-        <view class="line-control" wx:if="{{userInfo && userInfo.muster_match}}">
+        <view class="line-control" wx:if="{{userInfo && userInfo.muster_match && role === leaderRole}}">
             <view class="item-inner">
                 <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
             </view>
         </view>
-        <view class="line-control" wx:if="{{userInfo && userInfo.join_match}}">
+        <view class="line-control" wx:if="{{userInfo && userInfo.join_match && role === memberRole}}">
             <view class="item-inner">
                 <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
             </view>

@@ -2,9 +2,11 @@ var REQ = require('../../common/request.js');
 let {
   showBusy,
   showSuccess,
-  showModel,
-  statusName
+  showModel
 } = require('../../common/tools.js');
+const {
+  statusName
+} = require('../../common/const.js');
 
 Page({
   data: {

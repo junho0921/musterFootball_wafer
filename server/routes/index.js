@@ -15,6 +15,7 @@ const { auth: { authorizationMiddleware, validationMiddleware } } = require('../
 router.get('/login', authorizationMiddleware, controllers.user.login);
 // 用户信息
 router.get('/user/get', validationMiddleware, controllers.user.get);
+router.get('/user/getAll', validationMiddleware, controllers.user.getUser);
 router.get('/user/update', validationMiddleware, controllers.user.update);
 // 比赛
 router.get('/match/muster', validationMiddleware, controllers.match.muster);

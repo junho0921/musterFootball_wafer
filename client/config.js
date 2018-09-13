@@ -24,6 +24,7 @@ var config = {
         uploadUrl: `${host}/weapp/upload`,
 
         getUser: `${host}/weapp/user/get`,
+        getMembers: `${host}/weapp/user/getAll`,
         update: `${host}/weapp/user/update`,
         muster: `${host}/weapp/match/muster`,
         cancel: `${host}/weapp/match/cancel`,

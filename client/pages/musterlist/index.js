@@ -3,8 +3,10 @@ let {
   showBusy,
   showSuccess,
   showModel,
-  statusName
 } = require('../../common/tools.js');
+const {
+  statusName
+} = require('../../common/const.js');
 
 Page({
   data: {
