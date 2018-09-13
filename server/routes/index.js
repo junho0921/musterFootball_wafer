@@ -12,31 +12,10 @@ const { auth: { authorizationMiddleware, validationMiddleware } } = require('../
 
 // --- 登录与授权 Demo --- //
 // 登录接口 /weapp/login
-router.get('/login', authorizationMiddleware, controllers.user.login)
-router.get('/user/get', validationMiddleware, controllers.user.get)
-router.get('/user/update', validationMiddleware, controllers.user.update)
-// 用户信息接口（可以用来验证登录态） /weapp/user
-// router.get('/user', validationMiddleware, controllers.user)
-
-// --- 图片上传 Demo --- //
-// 图片上传接口，小程序端可以直接将 url 填入 wx.uploadFile 中 /weapp/upload
-router.post('/upload', controllers.upload)
-
-// --- 信道服务接口 Demo --- //
-// GET  用来响应请求信道地址的 /weapp/tunnel
-router.get('/tunnel', controllers.tunnel.get)
-// POST 用来处理信道传递过来的消息
-router.post('/tunnel', controllers.tunnel.post)
-
-// --- 客服消息接口 Demo --- //
-// GET  用来响应小程序后台配置时发送的验证请求 /weapp/message
-router.get('/message', controllers.message.get)
-// POST 用来处理微信转发过来的客服消息
-router.post('/message', controllers.message.post)
-
-// 用户
-// router.get('/user/login', authorizationMiddleware, controllers.user.login);
-// router.post('/user/update', validationMiddleware, controllers.user.update);
+router.get('/login', authorizationMiddleware, controllers.user.login);
+// 用户信息
+router.get('/user/get', validationMiddleware, controllers.user.get);
+router.get('/user/update', validationMiddleware, controllers.user.update);
 // 比赛
 router.get('/match/muster', validationMiddleware, controllers.match.muster);
 router.get('/match/edit', validationMiddleware, controllers.match.edit);
@@ -45,4 +24,4 @@ router.get('/match/join', validationMiddleware, controllers.match.join);
 router.get('/match/regret', validationMiddleware, controllers.match.regret);
 router.get('/match/get', controllers.match.get);
 
-module.exports = router
+module.exports = router;
