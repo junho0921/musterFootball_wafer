@@ -16,8 +16,10 @@ const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
   let timer = setTimeout(() => {
     resolve({ code: -1, msg: '请求超时' });
   }, data && data.timeout || REQ_DURATION);
+  let _url = `${url}?${objToJSON(data)}`;
+  console.log('请求url = ', _url);
   qcloud.request({
-    url: `${url}?${objToJSON(data)}`,
+    url:_url,
     success: (res) => {
       if (res.data && res.data.code == 0){
         resolve(res.data.data);
@@ -37,8 +39,10 @@ const requestWithoutUserInfo = url => data => new Promise((resolve, reject) => {
   let timer = setTimeout(() => {
     resolve({ code: -1, msg: '请求超时' });
   }, data && data.timeout || REQ_DURATION);
+  let _url = `${url}?${objToJSON(data)}`;
+  console.log('请求url = ', _url);
   wx.request({
-    url: `${url}?${objToJSON(data)}`,
+    url: _url,
     success: (res) => {
       if (res.data && res.data.code == 0) {
         resolve(res.data.data);

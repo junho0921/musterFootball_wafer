@@ -45,7 +45,7 @@
                 <navigator url='/pages/form/index?id={{matchId}}' hover-class="navigator-hover">发起一场比赛</navigator>
             </view>
         </view>
-        <view class="line-control" wx:if="{{userInfo && (!userInfo.real_name || !userInfo.phone)}}">
+        <view class="line-control">
             <view class="item-inner">
                 <navigator url='/pages/user/index' hover-class="navigator-hover">添加您的信息</navigator>
             </view>

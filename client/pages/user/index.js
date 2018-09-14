@@ -14,7 +14,6 @@ Page({
     loading: false
   },
   onLoad: function (options) {
-    console.log(1111, global);
     let info = global.userInfo;
     if (info){
       this.setData({
@@ -31,29 +30,43 @@ Page({
       this.setData({
         [key]: e.detail.value
       });
-      console.log('this.data', this.data)
     }
   },
+  submitting:false,
   submit: function (e) {
-    let info = this.data;
-    let data = {
-      real_name: info.real_name,
-      phone: info.phone,
-    };
-    this.setData({
-      loading: true
-    });
-    showBusy('正在请求');
-    return REQ.updateInfo(data).then((e, d, a) => {
+    if(this.submitting){
+      return;
+    }
+    this.submitting = true;
+    setTimeout(() => { // 延时执行,让bindInput的方法先执行
+      let info = this.data;
+      if(!info.real_name){
+        return showModel(`错误`, '没有填写姓名');
+      }
+      if(!info.phone){
+        return showModel(`错误`, '没有填写电话');
+      }
+      showBusy('正在请求');
       this.setData({
-        loading: false
+        loading: true
       });
-      showSuccess(`修改成功`);
-    }, (e) => {
-      this.setData({
-        loading: false
-      });
-      showModel(`修改失败`, e);
-    })
+      let data = {
+        real_name: info.real_name,
+        phone: info.phone,
+      };
+      return REQ.updateInfo(data).then(() => {
+        this.submitting = false;
+        this.setData({
+          loading: false
+        });
+        showSuccess(`修改成功`);
+      }, (e) => {
+        this.submitting = false;
+        this.setData({
+          loading: false
+        });
+        showModel(`修改失败`, e);
+      })
+    }, 100);
   }
 });
