@@ -1,4 +1,8 @@
 <view class="page-body">
+  <view class="page-section" wx:if="{{isNotRegister}}">
+    <view class="weui-cells__title" bindtap="toRegister">注意：提交前请先注册基本信息</view>
+  </view>
+
   <view class="page-section">
     <view class="weui-cells__title">比赛类型</view>
     <view class="weui-cells weui-cells_after-title">
@@ -64,7 +68,7 @@
     <view class="weui-cells__title">取消理由</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" auto-focus="{{toCancel}}" data-key='cancel_reason' value="{{cancel_reason}}" bindchange="bindInput" maxlength="50" placeholder="告诉队友们为什么取消吧"/>
+        <input disabled="{{disabled}}" class="weui-input" auto-focus="{{toCancel}}" data-key='cancel_reason' value="{{cancel_reason}}" bindchange="bindInput" maxlength="50" placeholder="告诉队友们为什么取消吧"/>
       </view>
     </view>
   </view>

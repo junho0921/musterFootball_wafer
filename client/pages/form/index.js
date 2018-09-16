@@ -2,8 +2,14 @@ var REQ = require('../../common/request.js');
 let {
   showBusy,
   showSuccess,
-  showModel
+  showModel,
+  isNotRegister,
+  toRegisterPage
 } = require('../../common/tools.js');
+let {
+  isEditable,
+  statusName
+} = require('../../common/const.js');
 
 Page({
   data: {
@@ -21,6 +27,7 @@ Page({
     disabled: false,
     loading: false,
     toCancel: false,
+    isNotRegister: false //用户是否已经注册
   },
   onLoad: function (options) {
     console.log('表格页面收到id', options.id)
@@ -32,8 +39,10 @@ Page({
         wx.hideToast();
         let info = res && res[0];
         if (info){
+          let disabled = !isEditable(info.status);
           this.setData({
             toCancel: options.type && options.type == 'cancel',
+            disabled,
             match_id: info.match_id,
             date: info.date,
             max_numbers: info.max_numbers,
@@ -43,6 +52,9 @@ Page({
             match_tips: info.match_tips,
             type: info.type
           });
+          if(disabled){
+            return showModel('error', `比赛不能编辑了，因为：${statusName(info.status)}`);
+          }
         }
       }, () => {
         showModel('error', '获取比赛信息失败，请重新进入本页面');
@@ -50,7 +62,15 @@ Page({
             disabled: true
         });
       })
+    }else{
+      // 检查是否已经注册
+      isNotRegister() && this.setData({
+        isNotRegister: true
+      })
     }
+  },
+  toRegister: function(){
+    toRegisterPage();
   },
   bindInput: function (e) {
     let { key } = e.currentTarget.dataset;
@@ -75,6 +95,12 @@ Page({
     });
   },
   submit: function(e){
+    // 检查是否注册
+    if(isNotRegister()){
+      showBusy('操作前需填写基本信息');
+      setTimeout(toRegisterPage, 2000);
+      return;
+    }
     if(this.submitting || this.data.toCancel){
       return;
     }
@@ -126,6 +152,12 @@ Page({
     },
     submitting:false,
     submitCancel: function (e) {
+        // 检查是否注册
+        if(isNotRegister()){
+          showBusy('操作前需填写基本信息');
+          setTimeout(toRegisterPage, 2000);
+          return;
+        }
         if(this.submitting){
             return;
         }
