@@ -1,12 +1,15 @@
+<view wx:for="{{leader}}" wx:for-index="idx" wx:for-item="item">
+  <image src='{{item.wx_img}}'></image>
+  <view>
+    队长：{{item.real_name}} ( {{item.name}} )
+  </view>
+  <view>
+    联系电话：{{leader.phone}}
+  </view>
+</view>
 <view wx:for="{{list}}" wx:for-index="idx" wx:for-item="item">
   <image src='{{item.wx_img}}'></image>
   <view>
-    昵称：{{item.name}}
-  </view>
-  <view>
-    真实姓名：{{item.real_name}}
-  </view>
-  <view>
-    联系电话：{{item.phone}}
+    成员：{{item.real_name}} ( {{item.name}} )
   </view>
 </view>

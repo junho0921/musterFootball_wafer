@@ -7,10 +7,12 @@ let {
 
 Page({
   data: {
+    leader: [],
     list: [],
   },
   onLoad: function (options) {
     this.setMembers(options);
+    this.setLeader(options);
   },
   setMatch: function (options) {
     console.log(1111, options, global);
@@ -25,15 +27,32 @@ Page({
         list: info.members
       });
     } else {
-      showModel('获取用户信息失败', '');
+      showModel('error', '获取用户信息失败');
     }
     console.log('用户信息', this.data)
+  },
+  setLeader: function (options) {
+    let leader = options.leader;
+    if(!leader){
+      return;
+    }
+    REQ.getMembersInfo({
+      id: leader.split(',')
+    }).then(res => {
+      if(res && res.length){
+        this.setData({
+          leader: res
+        });
+      }else{
+        return showModel('error', '获取队长信息失败');
+      }
+    });
   },
   setMembers: function (options) {
     console.log('setMembers', options);
     let membersId = options.mid;
     if (!membersId){
-      return showModel('获取用户信息失败', '');
+      return showModel('error', '获取用户信息失败');
     }
     REQ.getMembersInfo({
       id: membersId.split(',')
@@ -43,7 +62,7 @@ Page({
           list: res
         });
       }else{
-        return showModel('获取用户信息失败', '');
+        return showModel('error', '获取用户信息失败');
       }
     });
   },
