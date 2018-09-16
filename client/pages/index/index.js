@@ -39,20 +39,49 @@ Page({
     memberRole: ROLE.member
   },
 
+  onLoad: function(){
+    this.getRole();
+    try{
+      wx.getShareInfo({
+        success: function (res) {
+            console.log('get share info = ', res)
+        }
+      });
+    }catch (e) {
+        console.log('分享失败', e)
+    }
+  },
   onShow: function(){
     this.getUserInfo();
   },
 
-  setRole: function (e) {
+  getRole: function(){
+    let role = 0;
+    try{
+      role = wx.getStorageSync(STORE_KEY.role) || 0;
+    }catch (e){}
+    if(role){
+      this.setRole(role);
+    }
+  },
+
+  selectRole: function (e) {
     let { role } = e.currentTarget.dataset;
     if (role) {
-      this.setData({
-        role
-      });
+      this.setRole(role);
       if(!this.data.userInfo){
           this.login();
       }
     }
+  },
+
+  setRole: function (role) {
+    this.setData({
+      role
+    });
+    try{
+      wx.setStorageSync(STORE_KEY.role, role);
+    }catch (e){}
   },
 
   /**

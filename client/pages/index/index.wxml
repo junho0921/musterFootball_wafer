@@ -14,11 +14,11 @@
 
     <view class="line">
 		<view class="line-control">
-			<view bindtap="setRole" data-role='{{leaderRole}}' class="item" wx:if="{{role !== leaderRole}}">
-				<view class="item-inner">我是leader</view>
+			<view bindtap="selectRole" data-role='{{leaderRole}}' class="item" wx:if="{{role !== leaderRole}}">
+				<view class="item-inner">点击选择leader身份</view>
 			</view>
-			<view bindtap="setRole" data-role='{{memberRole}}' class="item" wx:if="{{role !== memberRole}}">
-				<view class="item-inner">我是member</view>
+			<view bindtap="selectRole" data-role='{{memberRole}}' class="item" wx:if="{{role !== memberRole}}">
+				<view class="item-inner">点击选择member身份</view>
 			</view>
 		</view>
 	</view>
@@ -52,12 +52,22 @@
         </view>
         <view class="line-control" wx:if="{{userInfo && userInfo.muster_match && role === leaderRole}}">
             <view class="item-inner">
-                <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}' hover-class="navigator-hover">我组织的比赛</navigator>
+                <navigator url='/pages/musterlist/index?id={{userInfo.muster_match}}&type=muster' hover-class="navigator-hover">我组织的比赛</navigator>
+            </view>
+        </view>
+        <view class="line-control" wx:if="{{userInfo && userInfo.cancel_muster_match && role === leaderRole}}">
+            <view class="item-inner">
+                <navigator url='/pages/musterlist/index?id={{userInfo.cancel_muster_match}}&type=cancel' hover-class="navigator-hover">已取消组织的比赛</navigator>
             </view>
         </view>
         <view class="line-control" wx:if="{{userInfo && userInfo.join_match && role === memberRole}}">
             <view class="item-inner">
-                <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}' hover-class="navigator-hover">我参与的比赛</navigator>
+                <navigator url='/pages/joinlist/index?id={{userInfo.join_match}}&type=join' hover-class="navigator-hover">我参与的比赛</navigator>
+            </view>
+        </view>
+        <view class="line-control" wx:if="{{userInfo && userInfo.regret_join_match && role === memberRole}}">
+            <view class="item-inner">
+                <navigator url='/pages/joinlist/index?id={{userInfo.regret_join_match}}&type=cancel' hover-class="navigator-hover">已取消参与的比赛</navigator>
             </view>
         </view>
     </view>
