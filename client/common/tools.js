@@ -23,9 +23,26 @@ var showModel = (title, content) => {
     showCancel: false
   });
 };
+const toRegisterPage = () => wx.navigateRedirect({
+  url: 'pages/user/index',
+  success: () => wx.hideToast(),
+  error: () => wx.hideToast(),
+});
+const isNotRegister = () => {
+  let {userInfo} = global;
+  if(!userInfo){
+    return true;
+  }else{
+    if(!userInfo.real_name || !userInfo.phone){
+      return true;
+    }
+  }
+};
 
 module.exports = {
   showBusy,
   showSuccess,
-  showModel
+  showModel,
+  isNotRegister,
+  toRegisterPage
 };
