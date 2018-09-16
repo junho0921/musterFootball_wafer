@@ -3,7 +3,7 @@
     <view class="weui-cells__title">比赛类型</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-key='type' value="{{type}}" bindchange="bindInput" maxlength="10" placeholder="例如：七人比赛"/>
+        <input disabled="{{disabled || toCancel}}" class="weui-input" data-key='type' value="{{type}}" bindchange="bindInput" maxlength="10" placeholder="例如：七人比赛"/>
       </view>
     </view>
   </view>
@@ -12,7 +12,7 @@
     <view class="weui-cells__title">比赛地点：{{position && position.name}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-       <button bindtap='pickLocation'>点我选择个地址</button>
+       <button disabled="{{disabled || toCancel}}" bindtap='pickLocation'>点我选择个地址</button>
       </view>
     </view>
   </view>
@@ -20,12 +20,12 @@
   <view class="page-section">
     <view class="weui-cells__title">比赛时间</view>
     <view class="weui-cells weui-cells_after-title">
-      <picker mode="date" data-key='date' value="{{date}}" bindchange="bindInput" start="2015-09-01" end="2017-09-01">
+      <picker disabled="{{disabled || toCancel}}" mode="date" data-key='date' value="{{date}}" bindchange="bindInput" start="2015-09-01" end="2017-09-01">
         <view class="picker">
           日期: {{date}}
         </view>
       </picker>
-      <picker mode="time" data-key='time' value="{{time}}" bindchange="bindInput" start="09:01" end="21:01">
+      <picker disabled="{{disabled || toCancel}}" mode="time" data-key='time' value="{{time}}" bindchange="bindInput" start="09:01" end="21:01">
         <view class="picker">
           时间: {{time}}
         </view>
@@ -37,7 +37,7 @@
     <view class="weui-cells__title">最少参与人数</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-key='min_numbers' value="{{min_numbers}}" bindchange="bindInput" placeholder="例如：10" />
+        <input disabled="{{disabled || toCancel}}" class="weui-input" data-key='min_numbers' value="{{min_numbers}}" bindchange="bindInput" placeholder="例如：10" />
       </view>
     </view>
   </view>
@@ -46,7 +46,7 @@
     <view class="weui-cells__title">最大参数人数</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-key='max_numbers' value="{{max_numbers}}" bindchange="bindInput" placeholder="例如：40" />
+        <input disabled="{{disabled || toCancel}}" class="weui-input" data-key='max_numbers' value="{{max_numbers}}" bindchange="bindInput" placeholder="例如：40" />
       </view>
     </view>
   </view>
@@ -55,12 +55,24 @@
     <view class="weui-cells__title">提示队员注意事项</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-key='match_tips' value="{{match_tips}}" bindchange="bindInput" maxlength="10" placeholder="例如：不能穿长钉鞋哦"/>
+        <input disabled="{{disabled || toCancel}}" class="weui-input" data-key='match_tips' value="{{match_tips}}" bindchange="bindInput" maxlength="50" placeholder="例如：不能穿长钉鞋哦"/>
       </view>
     </view>
   </view>
 
-  <view>
-    <button type="primary" size="default" loading="{{loading}}" disabled="{{disabled}}" bindtap="primary" bindtap="submit">submit</button>
+  <view class="page-section" wx:if="{{toCancel}}">
+    <view class="weui-cells__title">取消理由</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" auto-focus="{{toCancel}}" data-key='cancel_reason' value="{{cancel_reason}}" bindchange="bindInput" maxlength="50" placeholder="告诉队友们为什么取消吧"/>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!toCancel}}">
+    <button type="primary" size="default" loading="{{loading}}" disabled="{{disabled}}" bindtap="submit">submit</button>
+  </view>
+  <view wx:if="{{toCancel}}">
+    <button type="warn" size="default" loading="{{loading}}" disabled="{{disabled}}" bindtap="submitCancel">取消比赛</button>
   </view>
 </view>

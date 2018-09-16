@@ -59,7 +59,8 @@ Page({
         this.setData({
           loading: false
         });
-        showSuccess(`修改成功`);
+        showSuccess(`修改成功，正返回`);
+        this.navigateBack();
       }, (e) => {
         this.submitting = false;
         this.setData({
@@ -68,5 +69,13 @@ Page({
         showModel(`修改失败`, e);
       })
     }, 100);
-  }
+  },
+  navigateBack: function(){
+    setTimeout(() => {
+        wx.navigateBack({
+            delta: 1,
+            error: () => showModel(`error`, '返回失败')
+        });
+    }, 1000);
+  },
 });

@@ -6,6 +6,7 @@ const {
   statusName
 } = require('./const.js');
 const REQ = {};
+// let concurrent_req = {};
 const objToJSON = data =>
   typeof data === 'object' ? Object.keys(data).map(key => {
     let value = data[key];
@@ -13,6 +14,12 @@ const objToJSON = data =>
     return `${key}=${value}`;
   }).join('&') : '';
 const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
+  // let count = concurrent_req[url] || 0 ;
+  // if(data.maxConcurrent > (count+1)){
+  //   console.log(`${url}并发请求过多`);
+  //   return;
+  // }
+  // concurrent_req[url] = count+1;
   let timer = setTimeout(() => {
     resolve({ code: -1, msg: '请求超时' });
   }, data && data.timeout || REQ_DURATION);
@@ -32,6 +39,7 @@ const requestWidthUserInfo = url => data => new Promise((resolve, reject) => {
     },
     complete: () => {
       clearTimeout(timer);
+      // concurrent_req[url] -= 1;
     }
   });
 });

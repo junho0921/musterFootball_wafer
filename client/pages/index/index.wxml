@@ -42,7 +42,7 @@
     <view class="line" wx:if="{{role}}">
         <view class="line-control" wx:if="{{role === leaderRole}}">
             <view class="item-inner">
-                <navigator url='/pages/form/index?id={{matchId}}' hover-class="navigator-hover">发起一场比赛</navigator>
+                <navigator url='/pages/form/index' hover-class="navigator-hover">发起一场比赛</navigator>
             </view>
         </view>
         <view class="line-control">

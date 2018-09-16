@@ -39,7 +39,8 @@ Page({
     memberRole: ROLE.member
   },
 
-  onLoad: function(){
+  onShow: function(){
+    this.getUserInfo();
   },
 
   setRole: function (e) {
@@ -48,7 +49,9 @@ Page({
       this.setData({
         role
       });
-      this.login();
+      if(!this.data.userInfo){
+          this.login();
+      }
     }
   },
 
@@ -115,7 +118,12 @@ Page({
 
   getUserInfo(){
     REQ.getUserInfo().then(
-      res => showModel('userInfo', JSON.stringify(res)),
+      res => {
+          // showModel('userInfo', JSON.stringify(res));
+          console.log('用户信息', res);
+          this.setData({ userInfo: res, logged: true });
+          global.userInfo = res;
+      },
       e => showModel('userInfo error', JSON.stringify(e))
     )
   },

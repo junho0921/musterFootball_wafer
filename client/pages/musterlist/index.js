@@ -12,12 +12,14 @@ Page({
   data: {
     list: [],
   },
-  onLoad: function (options) {
-    let id = options.id;
-    if (id){
-      console.log('id', id);
+  onLoad: function(options){
+    this.mid = options.id;
+  },
+  onShow: function () {
+    if (this.mid){
+      console.log('id', this.mid);
       showBusy('加载信息中');
-      this.get(id);
+      this.get(this.mid);
     }else{
       showModel('没有id')
     }
