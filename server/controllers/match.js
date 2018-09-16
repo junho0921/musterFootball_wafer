@@ -1,6 +1,12 @@
 'use strict';
 const moment = require('moment');
-const {splitWord, matchStatus} = require('../tools/CONST');
+const {
+    splitWord,
+    matchStatus,
+    statusName,
+    isEditable,
+    isJoinable
+} = require('../tools/CONST');
 const ctx_service = require('../service');
 
 const getMatchUser  = async (ctx) => {
@@ -73,6 +79,11 @@ class MatchController {
             return
         }
 
+        if (!isEditable(matchInfo.status)){
+            throw new Error('比赛不能取消');
+            return
+        }
+
         let cancelSuccess = await ctx_service.match.update(Object.assign({}, matchInfo, {
             status: matchStatus.CANCEL,
             canceled_reason
@@ -107,6 +118,12 @@ class MatchController {
         // 检查用户的信息登记情况
         if(!userInfo.phone || !userInfo.real_name){
             throw new Error('报名前，请先登记信息');
+            return
+        }
+
+        // 检查比赛情况
+        if(!isJoinable(matchInfo.status)){
+            throw new Error('此比赛不能报名了，因为'+statusName[matchInfo.status]);
             return
         }
 
@@ -156,6 +173,11 @@ class MatchController {
         // 查询当前用户是否已经报名此比赛
         if (!matchInfo.members.includes(userInfo.open_id)) {
             throw new Error('您还没有报名');
+            return
+        }
+        // 判断比赛状态
+        if (!isEditable(matchInfo.status)) {
+            throw new Error('比赛不能取消参与,'+statusName[matchInfo.status]);
             return
         }
 
@@ -265,6 +287,18 @@ class MatchController {
             return
         }
         const match_id = data.match_id;
+        // 查询比赛信息
+        let matchInfo = await ctx_service.match.get({match_id});
+        if (!matchInfo) {
+            throw new Error('无此比赛信息');
+            return
+        }
+        // 判断是否可以编辑
+        if(!isEditable(matchInfo.status)){
+            throw new Error('比赛不可编辑');
+            return
+        }
+        // 更新
         const ret = await ctx_service.match.update({
             infoChangeTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             type: data.type || 5,
