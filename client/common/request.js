@@ -3,7 +3,9 @@ const qcloud = require('../vendor/wafer2-client-sdk/index');
 const config = require('../config.js');
 const {
   REQ_DURATION,
-  statusName
+  statusName,
+  isEditable,
+  isJoinable
 } = require('./const.js');
 const REQ = {};
 // let concurrent_req = {};
@@ -89,17 +91,19 @@ REQ.getMatchInfo = requestWithoutUserInfo(config.service.getMatch);
 REQ.getMatchDetail = function () {
   return REQ.getMatchInfo.apply(this, arguments).then(res => {
     let isSuccess = true;
-    try {
-      res.forEach(item => {
-        item.statusName = statusName[item.status];
-      });
-      res.forEach(item => {
+    res.forEach(item => {
+      item.statusName = statusName[item.status];
+      item.isJoinable = isJoinable(item.status);
+      item.isEditable = isEditable(item.status);
+    });
+    res.forEach(item => {
+      try {
         item.position = JSON.parse(item.position);
-      });
-    } catch (e) {
-      isSuccess = false;
-      console.log('解释比赛信息错误', e);
-    }
+      } catch (e) {
+        isSuccess = false;
+        console.log('解释比赛信息错误', e);
+      }
+    });
     return isSuccess ? res : Promise.reject({ code: -1, msg: '解释比赛信息错误' });
   })
 
